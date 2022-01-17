@@ -69,7 +69,7 @@ public class User extends BaseEntity {
     }
 
     public boolean isConfirmed() {
-        return this.isConfirmed();
+        return this.confirmed;
     }
 
     public void confirmUserAccount(){
