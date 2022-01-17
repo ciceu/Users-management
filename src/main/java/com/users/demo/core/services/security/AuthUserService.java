@@ -1,4 +1,4 @@
-package com.users.demo.core.services;
+package com.users.demo.core.services.security;
 
 import com.users.demo.core.domain.AuthUser;
 import com.users.demo.core.domain.exceptions.AuthUnauthorizedException;

@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 @NoArgsConstructor
 @Getter
@@ -37,7 +38,7 @@ public class ConfirmationToken extends BaseEntity {
     private Long id;
 
     @Getter
-    @Column(name = "token")
+    @Column(name = "token", unique = true)
     private String token;
 
     @Getter
@@ -52,7 +53,7 @@ public class ConfirmationToken extends BaseEntity {
 
     public ConfirmationToken(final User user) {
         super();
-        this.token = generateCode();
+        this.token = UUID.randomUUID().toString();
         this.user = user;
         this.expiryDate = calculateExpiryDate();
     }

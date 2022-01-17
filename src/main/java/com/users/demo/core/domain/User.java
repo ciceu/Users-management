@@ -3,6 +3,7 @@ package com.users.demo.core.domain;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -26,24 +27,31 @@ public class User extends BaseEntity {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
+    @Getter
     @Column(name = "username")
     private String username;
 
+    @Getter
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
+    @Getter
     @Column(name = "first_name")
     private String firstName;
 
+    @Getter
     @Column(name = "last_name")
     private String lastName;
 
+    @Getter
     @Column(name = "phone_number")
     private String phoneNumber;
 
+    @Getter
     @Column(name = "photo_url")
     private String photoUrl;
 
+    @Getter
     @Column(name = "birthdate")
     private LocalDateTime birthdate;
 
@@ -51,7 +59,7 @@ public class User extends BaseEntity {
     private boolean confirmed;
 
     @Getter
-    @OneToOne(targetEntity = AuthUser.class)
+    @OneToOne(targetEntity = AuthUser.class, cascade = CascadeType.ALL)
     @JoinColumn(nullable = false, name = "auth_user_id")
     private AuthUser authUser;
 
@@ -64,4 +72,8 @@ public class User extends BaseEntity {
         return this.isConfirmed();
     }
 
+    public void confirmUserAccount(){
+        this.confirmed = true;
+        this.authUser.enableUser();
+    }
 }

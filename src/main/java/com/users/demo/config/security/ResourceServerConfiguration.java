@@ -11,7 +11,8 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
 
     private static final String[] NO_AUTH_ENDPOINTS = {
-            "/confirm"
+            "/confirm",
+            "/register"
     };
 
     @Override
