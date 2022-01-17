@@ -47,6 +47,11 @@ public class AuthUser extends BaseEntity implements UserDetails {
         }
     }
 
+    public AuthUser(User user, String username) {
+        this.username = username;
+        this.password = user.getAuthUser().getPassword();
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
@@ -88,12 +93,13 @@ public class AuthUser extends BaseEntity implements UserDetails {
         this.enabled = true;
     }
 
-    public void disableUser() {
-        this.enabled = false;
-    }
-
     public void setPassword(String password) {
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         this.password = bCryptPasswordEncoder.encode(password);
     }
+
+    public Long getId() {
+        return this.id;
+    }
+
 }

@@ -47,6 +47,9 @@ public class User extends BaseEntity {
     @Column(name = "birthdate")
     private LocalDateTime birthdate;
 
+    @Column(name = "confirmed")
+    private boolean confirmed;
+
     @Getter
     @OneToOne(targetEntity = AuthUser.class)
     @JoinColumn(nullable = false, name = "auth_user_id")
@@ -55,6 +58,10 @@ public class User extends BaseEntity {
     public User (AuthUser authUser) {
         this.email = authUser.getUsername();
         this.authUser = authUser;
+    }
+
+    public boolean isConfirmed() {
+        return this.isConfirmed();
     }
 
 }
