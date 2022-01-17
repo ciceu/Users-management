@@ -1,5 +1,6 @@
 package com.users.demo.core.domain;
 
+import com.users.demo.infrastructure.builders.UserDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -66,6 +67,15 @@ public class User extends BaseEntity {
     public User (AuthUser authUser) {
         this.email = authUser.getUsername();
         this.authUser = authUser;
+    }
+
+    public User merge(UserDto userDto) {
+        this.username = userDto.getUsername();
+        this.phoneNumber = userDto.getPhoneNumber();
+        this.firstName = userDto.getFirstName();
+        this.lastName = userDto.getLastName();
+        this.photoUrl = userDto.getPhotoUrl();
+        return this;
     }
 
     public boolean isConfirmed() {

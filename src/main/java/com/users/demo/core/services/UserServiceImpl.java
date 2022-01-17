@@ -6,8 +6,10 @@ import com.users.demo.core.domain.User;
 import com.users.demo.core.domain.exceptions.BadRequestException;
 import com.users.demo.core.domain.exceptions.ConflictException;
 import com.users.demo.core.domain.exceptions.ErrorStatus;
+import com.users.demo.core.domain.exceptions.NotFoundException;
 import com.users.demo.core.repository.ConfirmationTokenRepository;
 import com.users.demo.core.repository.UserRepository;
+import com.users.demo.infrastructure.builders.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,6 +52,16 @@ public class UserServiceImpl implements UserService {
                 userRepository.save(user);
             }
         }
+    }
+
+    @Transactional
+    @Override
+    public User updateUserById(UserDto userDto, Long userId) {
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if(optionalUser.isPresent())
+            return optionalUser.get().merge(userDto);
+        else
+            throw new NotFoundException(ErrorStatus.USER_NOT_FOUND, String.format("Not found user with id: %s", userId));
     }
 
     private AuthUser createNewAuthUser(String email, String password, String confirmedPassword) {

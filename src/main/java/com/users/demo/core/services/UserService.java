@@ -24,4 +24,6 @@ public interface UserService {
      * Method used to confirm a new user account
      */
     void confirmUserAccount(String confirmationToken);
+
+    User updateUserById(UserDto userDto, Long userId);
 }
