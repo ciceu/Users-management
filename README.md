@@ -4,6 +4,7 @@ Implemented functionalities:
 * User authentication
 * Confirm user account
 * Edit user
+* Logout
 
 ### Requirements
 For building and running the application you need:

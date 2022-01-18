@@ -2,7 +2,6 @@ package com.users.demo.infrastructure.api;
 
 import com.users.demo.core.domain.User;
 import com.users.demo.core.services.UserService;
-import com.users.demo.core.services.security.AuthUserService;
 import com.users.demo.infrastructure.builders.ConfirmationTokenDto;
 import com.users.demo.infrastructure.builders.CredentialsDto;
 import com.users.demo.infrastructure.builders.DtoBuilder;
@@ -13,11 +12,18 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @RestController
 public class UserController {
@@ -51,5 +57,15 @@ public class UserController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(DtoBuilder.from(userService.updateUserById(userDto, userId)));
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity<SuccessStatusDto> logout(HttpServletRequest request, HttpServletResponse response) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null) {
+            new SecurityContextLogoutHandler().logout(request, response, auth);
+        }
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(SuccessStatusDto.builder().status("OK").message("Success").build());
     }
 }
