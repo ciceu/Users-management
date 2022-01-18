@@ -59,7 +59,7 @@ public class UserController {
                 .body(DtoBuilder.from(userService.updateUserById(userDto, userId)));
     }
 
-    @GetMapping("/logout")
+    @GetMapping("/users/logout")
     public ResponseEntity<SuccessStatusDto> logout(HttpServletRequest request, HttpServletResponse response) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null) {
