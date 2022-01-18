@@ -1,8 +1,15 @@
 package com.users.demo.core.domain;
 
+import com.users.demo.core.domain.exceptions.BadRequestException;
+import com.users.demo.core.domain.exceptions.ErrorStatus;
+import com.users.demo.core.services.security.AuthUserService;
 import com.users.demo.infrastructure.builders.UserDto;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,15 +21,19 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import java.time.LocalDateTime;
+import java.util.regex.Pattern;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
+@Builder
 @Table(name = "users")
 public class User extends BaseEntity {
 
     static final long serialVersionUID = 1L;
+    private static final Logger log = LogManager.getLogger(User.class);
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -65,7 +76,7 @@ public class User extends BaseEntity {
     private AuthUser authUser;
 
     public User (AuthUser authUser) {
-        this.email = authUser.getUsername();
+        setEmail(authUser.getUsername());
         this.authUser = authUser;
     }
 
@@ -76,6 +87,16 @@ public class User extends BaseEntity {
         this.lastName = userDto.getLastName();
         this.photoUrl = userDto.getPhotoUrl();
         return this;
+    }
+
+    public void setEmail(String email) {
+        log.debug("set email address {} to user", email);
+        String regex = "^(.+)@(.+)$";
+        Pattern pattern = Pattern.compile(regex);
+        if(pattern.matcher(email).matches())
+            this.email = email;
+        else
+            throw new BadRequestException(ErrorStatus.INVALID_FIELDS, "Invalid email address!");
     }
 
     public boolean isConfirmed() {

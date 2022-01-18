@@ -1,5 +1,7 @@
 package com.users.demo.core.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -20,7 +22,9 @@ import java.util.List;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
+@Builder
 @Table(name = "oauth_users")
 public class AuthUser extends BaseEntity implements UserDetails {
 

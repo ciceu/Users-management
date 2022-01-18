@@ -25,5 +25,12 @@ public interface UserService {
      */
     void confirmUserAccount(String confirmationToken);
 
+    /**
+     *
+     * @param  userDto the user details
+     * @param userId the user identifier
+     * @return the updated user
+     * Method used to edit a user by id
+     */
     User updateUserById(UserDto userDto, Long userId);
 }

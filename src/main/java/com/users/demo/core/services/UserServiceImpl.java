@@ -9,7 +9,10 @@ import com.users.demo.core.domain.exceptions.ErrorStatus;
 import com.users.demo.core.domain.exceptions.NotFoundException;
 import com.users.demo.core.repository.ConfirmationTokenRepository;
 import com.users.demo.core.repository.UserRepository;
+import com.users.demo.core.services.security.AuthUserService;
 import com.users.demo.infrastructure.builders.UserDto;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +22,8 @@ import java.util.Optional;
 @Service
 public class UserServiceImpl implements UserService {
 
+    private static final Logger log = LogManager.getLogger(UserServiceImpl.class);
+
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -27,6 +32,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public User register(String email, String password, String confirmedPassword) {
+        log.debug("register a new user with email {}", email);
         Optional<User> optionalUser = userRepository.findByEmail(email);
         if(optionalUser.isPresent())
             throw new ConflictException(ErrorStatus.EMAIL_ADDRESS_ALREADY_EXISTS, "This email address is already used!");
@@ -42,6 +48,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void confirmUserAccount(String confirmationToken) {
+        log.debug("confirm user account using token {}", confirmationToken);
         Optional<ConfirmationToken> optionalConfirmationToken = confirmationTokenRepository.findByToken(confirmationToken);
         if(optionalConfirmationToken.isPresent()) {
             if(optionalConfirmationToken.get().hasExpired())
@@ -57,6 +64,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public User updateUserById(UserDto userDto, Long userId) {
+        log.debug("update user by identifier {}", userId);
         Optional<User> optionalUser = userRepository.findById(userId);
         if(optionalUser.isPresent())
             return optionalUser.get().merge(userDto);
@@ -65,6 +73,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private AuthUser createNewAuthUser(String email, String password, String confirmedPassword) {
+        log.debug("create a new auth user with email {}", email);
         if(password.equals(confirmedPassword))
             return new AuthUser(email, password);
         else
