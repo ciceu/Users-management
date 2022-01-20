@@ -1,4 +1,4 @@
-#User management project
+# User management project
 This project represents the management of the users of a system.\
 Implemented functionalities:
 * User authentication
